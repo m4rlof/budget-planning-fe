@@ -1,0 +1,100 @@
+<app-page-breadcrumb pageTitle="Create planning" />
+<div class="grid grid-cols-12 gap-6">
+    <div class="col-span-12 space-y-6">
+        @if(loading){
+        <div class="flex items-center justify-center">
+            <app-spinner></app-spinner>
+        </div>
+        } @else {
+        <div class="bg-white border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 rounded-2xl">
+            <form [formGroup]="form">
+                <div class="space-y-6 p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+                    <div>
+                        <app-date-picker (dateChange)="onDateChange($event)" id="date-picker" label="Planning period"
+                            placeholder="Select a date" />
+                    </div>
+
+                    <div class="col-span-full">
+                        <h4
+                            class="pb-4 text-base font-medium text-gray-800 border-b border-gray-200 dark:border-gray-800 dark:text-white/90">
+                            Monthly entries</h4>
+                    </div>
+                    <div>
+                        <app-label>Entry type</app-label>
+                        <div class="flex flex-wrap items-center gap-8">
+                            <app-radio [id]="'option1'" [name]="'group1'" [value]="'income'" [label]="'Income'"
+                                [checked]="type === 'income'" (valueChange)="type = $event">
+                            </app-radio>
+
+                            <app-radio [id]="'option2'" [name]="'group1'" [value]="'outcome'" [label]="'Outcome'"
+                                [checked]="type === 'outcome'" (valueChange)="type = $event">
+                            </app-radio>
+                        </div>
+                    </div>
+                    <div>
+                        <app-label for="category">Category</app-label>
+                        <app-select id="category" [options]="categories" [value]="category"
+                            (valueChange)="category = $event" placeholder="Select a category"></app-select>
+                    </div>
+                    <div>
+                        <app-label for="amount">Amount</app-label>
+                        <app-input-field type="number" id="amount" placeholder="Entry amount" [value]="amount"
+                            (valueChange)="amount = $event" />
+                    </div>
+                    <div>
+                        <div class="flex gap-3 justify-end">
+                            <app-button size="sm" (btnClick)="addEntry()" [disabled]="entryDisabled()">
+                                Create entry
+                            </app-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        @if (tempEntries.length > 0) {
+        <div class="bg-white border border-gray-200 dark:bg-white/[0.03] dark:border-gray-800 rounded-2xl">
+            <div class="max-w-full overflow-x-auto">
+                <table class="min-w-full">
+                    <!-- Table Header -->
+                    <thead class="border-b border-gray-100 dark:border-white/[0.05]">
+                        <tr>
+                            <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                Category</th>
+                            <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                Type</th>
+                            <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                Amount</th>
+                        </tr>
+                    </thead>
+                    <!-- Table Body -->
+                    <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                        @for (entry of tempEntries; track entry.id) {
+                        <tr>
+                            <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                {{getCategory(entry.category)}}
+                            </td>
+                            <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                <app-badge size="sm" [color]="entry.type === 'income' ? 'success' :'error'">
+                                    {{entry.type}}
+                                </app-badge>
+                            </td>
+                            <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                {{entry.amount}}€
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4">
+                <div class="flex gap-3 justify-end">
+                    <app-button [disabled]="planningDisabled()" size="sm" (btnClick)="createPlaning()">
+                        Create planning
+                    </app-button>
+                </div>
+            </div>
+        </div>
+        }
+        }
+    </div>
+</div>
