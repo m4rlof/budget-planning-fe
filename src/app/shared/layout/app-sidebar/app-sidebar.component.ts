@@ -29,6 +29,11 @@ export class AppSidebarComponent {
   // Main nav items
   navItems: NavItem[] = [
     {
+      icon: `💡`,
+      name: 'Insights',
+      path: '/insights',
+    },
+    {
       icon: `📋`,
       name: 'Plannings',
       path: '/plannings',

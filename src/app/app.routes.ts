@@ -82,6 +82,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { GoalsComponent } from './pages/goals/goals.component';
 import { GoalDetailComponent } from './pages/goal-detail/goal-detail.component';
 import { GoalCreateComponent } from './pages/goal-create/goal-create.component';
+import { InsightsComponent } from './pages/insights/insights.component';
 
 export const routes: Routes = [
   {
@@ -90,9 +91,19 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: PLanningsComponent,
-        title: 'Plannings',
+        component: InsightsComponent,
+        title: 'Insights',
       },
+      {
+        path: 'insights',
+        component: InsightsComponent,
+        title: 'Insights',
+      },
+      // {
+      //   path: '',
+      //   component: PLanningsComponent,
+      //   title: 'Plannings',
+      // },
       {
         path: 'plannings',
         component: PLanningsComponent,
