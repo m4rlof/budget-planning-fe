@@ -16,4 +16,8 @@ export class InsightsService {
   getCurrentMonthSaving(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/insights/monthly-saving`);
   }
+
+  getMostExpensiveCategories(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/insights/expense-category`);
+  }
 }
