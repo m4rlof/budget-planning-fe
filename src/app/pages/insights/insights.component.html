@@ -31,7 +31,7 @@
                 @for (category of categories; track $index) {
                 <div class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800">
                     <span class="text-gray-500 text-theme-sm dark:text-gray-400">
-                        {{ normalizestr(category.name) }}
+                        {{category.icon}} {{ normalizestr(category.name) }}
                     </span>
                     <span class="text-right text-gray-500 text-theme-sm dark:text-gray-400">{{ category.amount
                         }}€</span>
