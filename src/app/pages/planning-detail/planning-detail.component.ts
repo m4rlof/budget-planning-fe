@@ -60,7 +60,7 @@ export class PLanningDetailComponent implements OnInit {
     this.loadPlaningWeeks(this.monthId);
 
     this.categoriesService.subcategories$.subscribe((res: any) => {
-      console.log("res", res)
+      console.log('res', res);
       this.categories = res?.data?.map((result: any) => {
         return {
           value: result.id,
@@ -155,5 +155,9 @@ export class PLanningDetailComponent implements OnInit {
       .split('_')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+
+  formatNumber(num: number) {
+    return Number(num.toFixed(2));
   }
 }
