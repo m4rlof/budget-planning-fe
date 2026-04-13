@@ -20,4 +20,12 @@ export class InsightsService {
   getMostExpensiveCategories(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/insights/expense-category`);
   }
+
+  getGoals(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/insights/goals`);
+  }
+
+  getGoal(id: any): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/insights/goal/${id}`);
+  }
 }

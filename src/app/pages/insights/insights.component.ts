@@ -9,14 +9,67 @@ import { InsightsService } from '../../shared/services/insights/insights.service
 import { SelectComponent } from '../../shared/components/form/select/select.component';
 import { CategoriesService } from '../../shared/services/categories/categories.service';
 import { LabelComponent } from '../../shared/components/form/label/label.component';
+import {
+  ApexNonAxisChartSeries,
+  ApexChart,
+  ApexPlotOptions,
+  ApexFill,
+  ApexStroke,
+  ApexOptions,
+  NgApexchartsModule,
+} from 'ng-apexcharts';
 
 @Component({
   selector: 'app-insights',
-  imports: [SafeHtmlPipe, BadgeComponent, SelectComponent, LabelComponent],
+  imports: [
+    SafeHtmlPipe,
+    BadgeComponent,
+    SelectComponent,
+    LabelComponent,
+    NgApexchartsModule,
+  ],
   templateUrl: './insights.component.html',
   styles: ``,
 })
 export class InsightsComponent implements OnInit {
+  public series: ApexNonAxisChartSeries = [75.55];
+  public chart: ApexChart = {
+    fontFamily: 'Outfit, sans-serif',
+    type: 'radialBar',
+    height: 330,
+    sparkline: { enabled: true },
+  };
+  public plotOptions: ApexPlotOptions = {
+    radialBar: {
+      startAngle: -85,
+      endAngle: 85,
+      hollow: { size: '80%' },
+      track: {
+        background: '#E4E7EC',
+        strokeWidth: '100%',
+        margin: 5,
+      },
+      dataLabels: {
+        name: { show: false },
+        value: {
+          fontSize: '36px',
+          fontWeight: '600',
+          offsetY: -40,
+          color: '#1D2939',
+          formatter: (val: number) => `${val}%`,
+        },
+      },
+    },
+  };
+  public fill: ApexFill = {
+    type: 'solid',
+    colors: ['#465FFF'],
+  };
+  public stroke: ApexStroke = {
+    lineCap: 'round',
+  };
+  public labels: string[] = ['Progress'];
+  public colors: string[] = ['#465FFF'];
   public insight!: any;
   public icons = {
     groupIcon: `<svg width="1em" height="1em" viewBox="0 0 25 24" fill="none"
@@ -30,6 +83,11 @@ export class InsightsComponent implements OnInit {
 </svg>`,
   };
   categories: any[] = [];
+  goals: any[] = [];
+  goalName: string = '';
+  goal!: any;
+  goalDaysLeft: any = '';
+  percentageLeft: any = '';
 
   constructor(private insightService: InsightsService) {}
 
@@ -41,6 +99,17 @@ export class InsightsComponent implements OnInit {
     this.insightService.getMostExpensiveCategories().subscribe((res: any) => {
       this.categories = res.data;
     });
+
+    this.insightService.getGoals().subscribe((res: any) => {
+      this.getGoalInsight(res.data[0].id);
+
+      this.goals = res.data.map((result: any) => {
+        return {
+          value: result.id,
+          label: result.name,
+        };
+      });
+    });
   }
 
   normalizestr(str: string) {
@@ -48,5 +117,29 @@ export class InsightsComponent implements OnInit {
       .split('_')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+
+  getGoalInsight(id: any) {
+    this.insightService.getGoal(id).subscribe((res: any) => {
+      this.goal = res.data;
+      this.goalDaysLeft = this.calculateDaysLeft(res.data.end_date);
+      this.percentageLeft = this.calculatePercentageLeft(
+        res.data.target_amount,
+        res.data.current_amount
+      );
+    });
+  }
+
+  calculateDaysLeft(endDate: any) {
+    const goalDate = moment(endDate);
+    const today = moment();
+    const daysLeft = goalDate.diff(today, 'days');
+    return daysLeft;
+  }
+
+  calculatePercentageLeft(target: any, current: any) {
+    const percentage = ((current / target) * 100).toFixed(2);
+    const percentageNumber = Number(percentage);
+    return [percentageNumber];
   }
 }
