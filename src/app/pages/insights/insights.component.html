@@ -31,6 +31,9 @@
                     <div class="max-h-[330px]" id="chartDarkStyle">
                         <apx-chart [series]="percentageLeft" [chart]="chart" [plotOptions]="plotOptions" [fill]="fill"
                             [stroke]="stroke" [labels]="labels" [colors]="colors"></apx-chart>
+                        <p class="mt-2 text-center text-lg font-semibold text-gray-800 dark:text-white">Target Amount:
+                            €{{goal.target_amount}}</p>
+
                     </div>
                 </div>
             </div>
