@@ -7,7 +7,7 @@
             <div class="flex items-end justify-between mt-5">
                 <div>
                     <span class="text-sm text-gray-500 dark:text-gray-400">Current month economy</span>
-                    <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{insight.saving}}€</h4>
+                    <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{formatToTwoDecimals(insight.saving)}}€</h4>
                 </div>
                 <app-badge color="success">
                     {{insight.savingPercentage}}%
@@ -31,7 +31,7 @@
                     <div class="max-h-[330px]" id="chartDarkStyle">
                         <apx-chart [series]="percentageLeft" [chart]="chart" [plotOptions]="plotOptions" [fill]="fill"
                             [stroke]="stroke" [labels]="labels" [colors]="colors"></apx-chart>
-                        <p class="mt-2 text-center text-lg font-semibold text-gray-800 dark:text-white">Target Amount:
+                        <p class="mt-2 text-center text-sm font-normal text-gray-500 dark:text-gray-400">Goal:
                             €{{goal.target_amount}}</p>
 
                     </div>
