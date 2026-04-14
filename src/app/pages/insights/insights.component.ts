@@ -146,4 +146,8 @@ export class InsightsComponent implements OnInit {
     const percentageNumber = Number(percentage);
     return [percentageNumber];
   }
+
+  formatToTwoDecimals(value: number): string {
+    return value.toFixed(2);
+  }
 }
