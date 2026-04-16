@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { PageBreadcrumbComponent } from '../../shared/components/common/page-breadcrumb/page-breadcrumb.component';
 import { Router } from '@angular/router';
 import { PlanningsService } from '../../shared/services/plannings/plannings.service';
@@ -71,6 +71,7 @@ export class InsightsComponent implements OnInit {
   public labels: string[] = ['Progress'];
   public colors: string[] = ['#465FFF'];
   public insight!: any;
+  public data: any[] = [];
   public icons = {
     groupIcon: `<svg width="1em" height="1em" viewBox="0 0 25 24" fill="none"
             xmlns="http://www.w3.org/2000/svg" class="size-6">
@@ -92,8 +93,18 @@ export class InsightsComponent implements OnInit {
   goal!: any;
   goalDaysLeft: any = '';
   percentageLeft: any = '';
+  openItemId: number | null = null;
 
-  constructor(private insightService: InsightsService) {}
+  openSections: { [key: string]: boolean } = {
+    categories: true,
+    months: true,
+  };
+  sectionHeights: { [key: string]: number } = {};
+
+  constructor(
+    private insightService: InsightsService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.insightService.getCurrentMonthSaving().subscribe((res: any) => {
@@ -102,6 +113,11 @@ export class InsightsComponent implements OnInit {
 
     this.insightService.getMostExpensiveCategories().subscribe((res: any) => {
       this.categories = res.data;
+    });
+
+    this.insightService.getData().subscribe((res: any) => {
+      this.data = res.data.months;
+      console.log(this.data);
     });
 
     this.insightService.getGoals().subscribe((res: any) => {
@@ -134,6 +150,15 @@ export class InsightsComponent implements OnInit {
     });
   }
 
+  toggle(id: number) {
+    console.log(id);
+    this.openItemId = this.openItemId === id ? null : id;
+  }
+
+  isOpen(id: number): boolean {
+    return this.openItemId === id;
+  }
+
   calculateDaysLeft(endDate: any) {
     const goalDate = moment(endDate);
     const today = moment();
@@ -142,12 +167,16 @@ export class InsightsComponent implements OnInit {
   }
 
   calculatePercentageLeft(target: any, current: any) {
-    const percentage = ((current / target) * 100).toFixed(2);
+    const percentage = ((current / target) * 100)?.toFixed(2);
     const percentageNumber = Number(percentage);
     return [percentageNumber];
   }
 
   formatToTwoDecimals(value: number): string {
-    return value.toFixed(2);
+    return value?.toFixed(2);
+  }
+
+  toMonth(month: number) {
+    return moment().month(month).format('MMMM');
   }
 }

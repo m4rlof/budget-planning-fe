@@ -28,4 +28,8 @@ export class InsightsService {
   getGoal(id: any): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/insights/goal/${id}`);
   }
+
+  getData(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/financial-entries/fixed-totals`);
+  }
 }
